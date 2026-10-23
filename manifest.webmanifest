@@ -1,0 +1,11 @@
+{
+  "name": "Lenete corre",
+  "short_name": "Lenete",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f3e9d6",
+  "theme_color": "#f3e9d6",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
