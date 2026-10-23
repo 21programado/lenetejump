@@ -38,7 +38,19 @@ const mb=document.getElementById('m');
 mb.addEventListener('click',()=>{mute=!mute;mb.textContent=mute?'🔇':'🔊';mb.blur()});
 
 /* control */
-function jump(){if(!dog.air){dog.vy=780;dog.air=true;tone(380,560,.14,.045)}}
+let lastYip=0;
+function yip(){
+  if(!ac||mute)return;
+  const n=ac.currentTime,d=.45+Math.random()*.25,b=520+Math.random()*180;
+  const o=ac.createOscillator(),g=ac.createGain(),f=ac.createBiquadFilter(),l=ac.createOscillator(),lg=ac.createGain();
+  o.type='triangle';f.type='lowpass';f.frequency.value=1800;
+  o.frequency.setValueAtTime(b,n);o.frequency.exponentialRampToValueAtTime(b*1.9,n+d*.45);o.frequency.exponentialRampToValueAtTime(b*1.25,n+d);
+  l.frequency.value=7+Math.random()*3;lg.gain.value=18;l.connect(lg);lg.connect(o.frequency);
+  g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(.05,n+.06);g.gain.exponentialRampToValueAtTime(.0001,n+d);
+  o.connect(f);f.connect(g);g.connect(ac.destination);
+  o.start(n);l.start(n);o.stop(n+d+.05);l.stop(n+d+.05);
+}
+function jump(){if(!dog.air){dog.vy=780;dog.air=true;tone(380,560,.14,.045);const now=performance.now();if(now-lastYip>12000&&Math.random()<.2){lastYip=now;setTimeout(yip,150)}}}
 function start(){reset();st='run';jump()}
 cv.addEventListener('pointerdown',e=>{
   e.preventDefault();audio();
